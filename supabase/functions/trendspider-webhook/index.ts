@@ -16,6 +16,17 @@ function direction(value: unknown): "bullish" | "bearish" | "neutral" {
   return "neutral";
 }
 
+function safeUrl(value: unknown) {
+  const candidate = text(value);
+  if (!candidate) return null;
+  try {
+    const url = new URL(candidate);
+    return url.protocol === "https:" ? url.toString().slice(0, 2000) : null;
+  } catch {
+    return null;
+  }
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (request.method !== "POST") return Response.json({ error: "Method not allowed" }, { status: 405, headers: corsHeaders });
@@ -45,6 +56,8 @@ Deno.serve(async (request) => {
       timeframe: text(payload.timeframe).slice(0, 40) || null,
       note: text(payload.note).slice(0, 1000) || null,
       status: text(payload.status, "triggered").slice(0, 80),
+      chart_url: safeUrl(payload.chart_url ?? payload.image_url),
+      source_url: safeUrl(payload.source_url ?? payload.url),
       triggered_at: payload.triggered_at || new Date().toISOString(),
       raw_payload: sanitizedPayload,
     };

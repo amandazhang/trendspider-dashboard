@@ -43,9 +43,15 @@ Add this JSON as the alert note/body, replacing the secret and the fields TrendS
   "direction": "bullish",
   "timeframe": "daily",
   "status": "triggered",
-  "note": "Daily breakout confirmation"
+  "note": "Daily breakout confirmation",
+  "chart_url": "https://OPTIONAL-PUBLIC-CHART-IMAGE-URL",
+  "source_url": "https://OPTIONAL-SOURCE-PAGE-URL"
 }
 ```
+
+`chart_url` and `source_url` are optional and must use HTTPS. Standard
+TrendSpider alert webhooks do not automatically include a chart screenshot;
+omit these fields unless you have a public chart/share URL to send.
 
 For a Strategy Bot, use its supported variables instead:
 
