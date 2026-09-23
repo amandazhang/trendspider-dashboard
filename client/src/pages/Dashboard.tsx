@@ -147,9 +147,6 @@ export default function Dashboard() {
             {/* Incoming TrendSpider alerts are informational and do not change the market score. */}
             <TrendSpiderSignals />
 
-            {/* Public TrendSpider charts from X are editorial, not personalized alerts. */}
-            <TrendSpiderXFeed />
-
             {/* Category Panels Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3">
               {data.categories.map((cat) => (
@@ -172,6 +169,9 @@ export default function Dashboard() {
                 <ScoreBreakdown categories={data.categories} totalScore={data.marketQualityScore} />
               </div>
             </div>
+
+            {/* Public TrendSpider charts from X are editorial, not personalized alerts. */}
+            <TrendSpiderXFeed />
           </div>
         ) : null}
       </main>
