@@ -112,6 +112,10 @@ Set via `.env.development` and `.env.production` (read by Vite at build time).
 
 ## Features
 
+### Optional TrendSpider signal feed
+
+This fork can receive TrendSpider alert and Strategy Bot webhooks through a Supabase Edge Function and display them in a separate, read-only dashboard section. See [TRENDSPIDER_SETUP.md](TRENDSPIDER_SETUP.md). Signals do not alter the market score or submit orders.
+
 - **Terminal-style UI** with light, dark, and iOS Liquid Glass themes, cycled with a View Transitions animation
 - **Glass theme** — frosted liquid-glass panels over a pure-CSS drifting light-bloom backdrop, plus a custom glass cursor (mouse only; touch and the terminal themes keep the native cursor)
 - **Auto-refresh** (dev) or daily snapshot (prod)

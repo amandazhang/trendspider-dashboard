@@ -11,6 +11,7 @@ import { DashboardSkeleton } from "../components/DashboardSkeleton";
 import { RefreshCw, Activity } from "lucide-react";
 import { AppHeader } from "../components/AppHeader";
 import { ThemeToggle } from "../components/ThemeToggle";
+import { TrendSpiderSignals } from "../components/TrendSpiderSignals";
 
 const IS_STATIC = import.meta.env.VITE_DATA_MODE === "static";
 
@@ -141,6 +142,9 @@ export default function Dashboard() {
                 <AnalysisPanel summary={data.summary} dataSource={data.dataSource} terminalAnalysis={data.terminalAnalysis} />
               </div>
             </div>
+
+            {/* Incoming TrendSpider alerts are informational and do not change the market score. */}
+            <TrendSpiderSignals />
 
             {/* Category Panels Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3">
