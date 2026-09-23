@@ -77,12 +77,14 @@ export function TrendSpiderSignals() {
   const feedColor = error ? "var(--terminal-red)" : stale || !configured ? "var(--terminal-amber)" : "var(--terminal-green)";
   const counts = useMemo(() => ({ bullish: today.filter((s) => s.direction === "bullish").length, bearish: today.filter((s) => s.direction === "bearish").length, neutral: today.filter((s) => s.direction === "neutral").length }), [today]);
 
+  if (configured && !loading && !error && groups.length === 0) return null;
+
   return (
     <section className="rounded-lg border glass-panel overflow-hidden" style={{ background: "var(--terminal-surface)", borderColor: "var(--terminal-border)" }} data-testid="trendspider-signals">
       <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b" style={{ borderColor: "var(--terminal-border)" }}>
         <div className="flex items-center gap-2">
           <Radio className="w-4 h-4" style={{ color: "var(--terminal-cyan)" }} />
-          <h3 className="text-xs font-bold tracking-wider uppercase" style={{ color: "var(--text-secondary)" }}>TrendSpider Alert Gallery</h3>
+          <h3 className="text-xs font-bold tracking-wider uppercase" style={{ color: "var(--text-secondary)" }}>Personal TrendSpider Alerts</h3>
           <span className="flex items-center gap-1 text-[10px] font-bold tracking-wider" style={{ color: feedColor }}><span className="w-1.5 h-1.5 rounded-full" style={{ background: feedColor }} />{feedLabel}</span>
           <span className="text-[10px] tabular-nums" style={{ color: "var(--text-muted)" }}>{today.length} TODAY</span>
         </div>

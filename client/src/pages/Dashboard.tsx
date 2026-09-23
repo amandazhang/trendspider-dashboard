@@ -12,6 +12,7 @@ import { RefreshCw, Activity } from "lucide-react";
 import { AppHeader } from "../components/AppHeader";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { TrendSpiderSignals } from "../components/TrendSpiderSignals";
+import { TrendSpiderXFeed } from "../components/TrendSpiderXFeed";
 
 const IS_STATIC = import.meta.env.VITE_DATA_MODE === "static";
 
@@ -145,6 +146,9 @@ export default function Dashboard() {
 
             {/* Incoming TrendSpider alerts are informational and do not change the market score. */}
             <TrendSpiderSignals />
+
+            {/* Public TrendSpider charts from X are editorial, not personalized alerts. */}
+            <TrendSpiderXFeed />
 
             {/* Category Panels Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3">
