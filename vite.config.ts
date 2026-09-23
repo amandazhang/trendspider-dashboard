@@ -13,8 +13,8 @@ export default defineConfig(({ mode }) => ({
   },
   root: path.resolve(import.meta.dirname, "client"),
   envDir: path.resolve(import.meta.dirname, "client"), // Explicitly set env directory
-  // Use /trading-dashboard/ for GitHub Pages, ./ for local dev
-  base: mode === "production" ? "/trading-dashboard/" : "./",
+  // Match the GitHub Pages project path for this repository.
+  base: mode === "production" ? "/trendspider-dashboard/" : "./",
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
