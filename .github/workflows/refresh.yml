@@ -2,8 +2,9 @@ name: Refresh Market Data & Deploy
 
 on:
   schedule:
-    - cron: '0 13 * * 1-5'   # 21:00 SGT Mon-Fri — pre-open build (~30min before US open)
-    - cron: '0 1 * * 2-6'    # 09:00 SGT Tue-Sat — after the RS pipeline's ~07:55 SGT commit
+    # Cover both EST and EDT. The first step below limits actual refreshes to
+    # 09:30–16:00 America/New_York, including the closing snapshot.
+    - cron: '*/15 13-21 * * 1-5'
   workflow_dispatch: # manual trigger
 
 permissions:
@@ -22,29 +23,48 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Check US market hours
+        id: market-hours
+        shell: bash
+        run: |
+          market_time="$(TZ=America/New_York date +%H%M)"
+          if (( 10#$market_time >= 930 && 10#$market_time <= 1600 )); then
+            echo "open=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "open=false" >> "$GITHUB_OUTPUT"
+            echo "Outside US market hours; skipping scheduled refresh."
+          fi
+
       - uses: actions/checkout@v4
+        if: github.event_name == 'workflow_dispatch' || steps.market-hours.outputs.open == 'true'
 
       - uses: actions/setup-node@v4
+        if: github.event_name == 'workflow_dispatch' || steps.market-hours.outputs.open == 'true'
         with:
           node-version: 20
           cache: npm
 
       - run: npm ci
+        if: github.event_name == 'workflow_dispatch' || steps.market-hours.outputs.open == 'true'
 
       - name: Fetch market data
+        if: github.event_name == 'workflow_dispatch' || steps.market-hours.outputs.open == 'true'
         run: npx tsx script/refresh.ts
 
       - name: Build static site
+        if: github.event_name == 'workflow_dispatch' || steps.market-hours.outputs.open == 'true'
         run: npx tsx script/build-static.ts
         env:
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
 
       - name: Upload Pages artifact
+        if: github.event_name == 'workflow_dispatch' || steps.market-hours.outputs.open == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist/public
 
       - name: Deploy to GitHub Pages
+        if: github.event_name == 'workflow_dispatch' || steps.market-hours.outputs.open == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
