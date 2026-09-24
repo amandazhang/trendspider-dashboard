@@ -2,9 +2,10 @@ name: Refresh Market Data & Deploy
 
 on:
   schedule:
-    # Cover both EST and EDT. The first step below limits actual refreshes to
-    # 09:30–16:00 America/New_York, including the closing snapshot.
-    - cron: '*/15 13-21 * * 1-5'
+    # Offset from crowded quarter-hour boundaries to reduce GitHub scheduler
+    # delays. The market-hours guard below remains the final safety check.
+    - cron: '7,22,37,52 9-15 * * 1-5'
+      timezone: 'America/New_York'
   workflow_dispatch: # manual trigger
 
 permissions:
